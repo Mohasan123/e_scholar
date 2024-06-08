@@ -1,4 +1,3 @@
-<<<<<<< HEAD
 import 'package:cloud_firestore/cloud_firestore.dart';
 
 enum UserRole { student, admin }
@@ -30,17 +29,7 @@ class UserData {
     );
   }
 
-// factory UserData.fromJson(Map<String, dynamic> json) {
-//   return UserData(
-//     email: json['email'],
-//     name: json['username'],
-//     uid: json['uid'],
-//     role: UserRole.values.firstWhere(
-//       (element) => element.toString() == json['role'],
-//       orElse: () => UserRole.student,
-//     ),
-//   );
-// }
+
 
   Map<String, dynamic> toJson() => {
         "email": email,
@@ -61,18 +50,15 @@ class UserData {
 //     ),
 //   );
 // }
-=======
-class UserData {
-  final String email;
-  final String name;
-  final String uid;
-
-  UserData({required this.email, required this.name, required this.uid});
-
-  Map<String, dynamic> toJson() => {
-    "email": email,
-    "username": name,
-    "uid": uid,
-  };
->>>>>>> 7961d6c2c2f8e2551eeff971619272f84bc666cf
+// factory UserData.fromJson(Map<String, dynamic> json) {
+//   return UserData(
+//     email: json['email'],
+//     name: json['username'],
+//     uid: json['uid'],
+//     role: UserRole.values.firstWhere(
+//       (element) => element.toString() == json['role'],
+//       orElse: () => UserRole.student,
+//     ),
+//   );
+// }
 }

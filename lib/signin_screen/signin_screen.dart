@@ -1,5 +1,4 @@
 import 'package:e_scolar_app/auth/auth_methods.dart';
-<<<<<<< HEAD
 import 'package:e_scolar_app/signin_screen/verify_sms_screen.dart';
 import 'package:e_scolar_app/signin_screen/widgets/circular_buttons.dart';
 import 'package:flutter/material.dart';
@@ -8,15 +7,6 @@ import 'package:go_router/go_router.dart';
 import '../constant/constant_svg.dart';
 import '../constant/pallete_color.dart';
 import '../models/userdata.dart';
-=======
-import 'package:e_scolar_app/home_screen/home_screen.dart';
-import 'package:e_scolar_app/signin_screen/widgets/circular_buttons.dart';
-import 'package:flutter/gestures.dart';
-import 'package:flutter/material.dart';
-
-import '../constant/constant_svg.dart';
-import '../constant/pallete_color.dart';
->>>>>>> 7961d6c2c2f8e2551eeff971619272f84bc666cf
 
 class SignInScreen extends StatefulWidget {
   const SignInScreen({super.key});
@@ -28,12 +18,8 @@ class SignInScreen extends StatefulWidget {
 class _SignInScreenState extends State<SignInScreen> {
   TextEditingController emailController = TextEditingController();
   TextEditingController passController = TextEditingController();
-<<<<<<< HEAD
   final _formKey = GlobalKey<FormState>();
   final _authMethods = AuthMethods();
-=======
-  bool? isChecked = false;
->>>>>>> 7961d6c2c2f8e2551eeff971619272f84bc666cf
 
   @override
   void dispose() {
@@ -42,7 +28,6 @@ class _SignInScreenState extends State<SignInScreen> {
     super.dispose();
   }
 
-<<<<<<< HEAD
   // Future<void> loginUser() async {
   //   String res = await AuthMethods().loginUser(
   //       email: emailController.text,
@@ -112,26 +97,14 @@ class _SignInScreenState extends State<SignInScreen> {
           content: Text(result),
         ),
       );
-=======
-  Future<void> loginUser() async {
-    String res = await AuthMethods()
-        .loginUser(email: emailController.text, password: passController.text);
-    if (res == "success") {
-      Navigator.push(
-          context, MaterialPageRoute(builder: (context) => HomeScreen()));
->>>>>>> 7961d6c2c2f8e2551eeff971619272f84bc666cf
     }
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-<<<<<<< HEAD
       body: Form(
         key: _formKey,
-=======
-      body: SafeArea(
->>>>>>> 7961d6c2c2f8e2551eeff971619272f84bc666cf
         child: Container(
           decoration: const BoxDecoration(
             gradient: ColorPalette.gradiantColor,
@@ -190,7 +163,6 @@ class _SignInScreenState extends State<SignInScreen> {
               Padding(
                 padding: const EdgeInsets.only(left: 20.0, right: 20.0),
                 child: Row(
-<<<<<<< HEAD
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
                       Row(
@@ -207,39 +179,6 @@ class _SignInScreenState extends State<SignInScreen> {
                         ],
                       ),
                     ]),
-=======
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    Row(
-                      children: [
-                        Checkbox(
-                            value: isChecked,
-                            activeColor: ColorPalette.primaryColor,
-                            onChanged: (newBool) {
-                              setState(() {
-                                isChecked = newBool;
-                              });
-                            }),
-                        const Text(
-                          "Remember me",
-                          style: TextStyle(letterSpacing: 0.5),
-                        ),
-                      ],
-                    ),
-                    GestureDetector(
-                      onTap: () {
-                        print("Forgot Password");
-                      },
-                      child: const Text(
-                        "Forgot Password",
-                        style: TextStyle(
-                            decoration: TextDecoration.underline,
-                            letterSpacing: 0.5),
-                      ),
-                    )
-                  ],
-                ),
->>>>>>> 7961d6c2c2f8e2551eeff971619272f84bc666cf
               ),
               const SizedBox(height: 15.0),
               Padding(
@@ -250,13 +189,9 @@ class _SignInScreenState extends State<SignInScreen> {
                       BoxDecoration(borderRadius: BorderRadius.circular(8.0)),
                   child: ElevatedButton(
                     onPressed: () {
-<<<<<<< HEAD
                       if (_formKey.currentState!.validate()) {
                         loginUser();
                       }
-=======
-                      loginUser();
->>>>>>> 7961d6c2c2f8e2551eeff971619272f84bc666cf
                     },
                     style: ElevatedButton.styleFrom(
                       backgroundColor: ColorPalette.primaryColor,
@@ -287,7 +222,6 @@ class _SignInScreenState extends State<SignInScreen> {
                   ),
                 ),
               ),
-<<<<<<< HEAD
               // Row(
               //   mainAxisAlignment: MainAxisAlignment.center,
               //   children: [
@@ -312,29 +246,6 @@ class _SignInScreenState extends State<SignInScreen> {
               //     ),
               //   ],
               // ),
-=======
-              Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  RichText(
-                    text: TextSpan(
-                      text: "Don't have an account?",
-                      style: const TextStyle(
-                          color: Colors.black, fontSize: 15, letterSpacing: 1),
-                      children: <TextSpan>[
-                        TextSpan(
-                            text: " Sign Up",
-                            style: const TextStyle(
-                                color: ColorPalette.primaryColor,
-                                fontSize: 16,
-                                fontWeight: FontWeight.bold),
-                            recognizer: TapGestureRecognizer()..onTap = () {}),
-                      ],
-                    ),
-                  ),
-                ],
-              ),
->>>>>>> 7961d6c2c2f8e2551eeff971619272f84bc666cf
             ],
           ),
         ),

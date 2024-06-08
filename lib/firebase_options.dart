@@ -51,7 +51,7 @@ class DefaultFirebaseOptions {
 
   static const FirebaseOptions android = FirebaseOptions(
     apiKey: 'AIzaSyB9f5UfDFNNRQHDHjfAwqy64v89a_OHm0M',
-    appId: '1:304707538170:android:59cab6416ef88aa207cd43',
+    appId: '1:304707538170:android:8d255309e5a9695107cd43',
     messagingSenderId: '304707538170',
     projectId: 'e-scolar-app-938f3',
     storageBucket: 'e-scolar-app-938f3.appspot.com',
@@ -59,10 +59,11 @@ class DefaultFirebaseOptions {
 
   static const FirebaseOptions ios = FirebaseOptions(
     apiKey: 'AIzaSyDhlvy2Gwh8LAQtVa44MU9M6glglgws-48',
-    appId: '1:304707538170:ios:58bf5835473fd32007cd43',
+    appId: '1:304707538170:ios:ec3b7adbba5e5fab07cd43',
     messagingSenderId: '304707538170',
     projectId: 'e-scolar-app-938f3',
     storageBucket: 'e-scolar-app-938f3.appspot.com',
-    iosBundleId: 'com.example.eScolarApp',
+    iosBundleId: 'com.example.eScholar',
   );
+
 }
