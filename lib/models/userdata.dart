@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 import 'package:cloud_firestore/cloud_firestore.dart';
 
 enum UserRole { student, admin }
@@ -60,4 +61,18 @@ class UserData {
 //     ),
 //   );
 // }
+=======
+class UserData {
+  final String email;
+  final String name;
+  final String uid;
+
+  UserData({required this.email, required this.name, required this.uid});
+
+  Map<String, dynamic> toJson() => {
+    "email": email,
+    "username": name,
+    "uid": uid,
+  };
+>>>>>>> 7961d6c2c2f8e2551eeff971619272f84bc666cf
 }

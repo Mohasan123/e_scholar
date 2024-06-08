@@ -44,6 +44,7 @@ dependencies:
   firebase_auth: ^4.19.5
   google_sign_in: ^6.2.1
   cloud_firestore: ^4.17.3
+<<<<<<< HEAD
   dropdown_button2: ^2.3.9
   provider: ^6.1.2
   flutter_launcher_icons: ^0.13.1
@@ -54,6 +55,9 @@ dependencies:
   animated_snack_bar: ^0.4.0
   flutter_native_splash: ^2.4.0
   firebase_messaging: ^14.9.4
+=======
+
+>>>>>>> 7961d6c2c2f8e2551eeff971619272f84bc666cf
 dev_dependencies:
   flutter_test:
     sdk: flutter
@@ -64,7 +68,13 @@ dev_dependencies:
   # package. See that file for information about deactivating specific lint
   # rules and activating additional ones.
   flutter_lints: ^3.0.0
+<<<<<<< HEAD
 
+=======
+  flutter_launcher_icons: ^0.13.1
+  flutter_svg: ^2.0.10+1
+  iconsax: ^0.0.8
+>>>>>>> 7961d6c2c2f8e2551eeff971619272f84bc666cf
   font_awesome_flutter: ^10.7.0
 
 # For information on the generic Dart part of this file, see the
@@ -88,7 +98,10 @@ flutter:
     - assets/onboarding/
     - assets/animations/
     - assets/splash/
+<<<<<<< HEAD
     - assets/icon_eschool/
+=======
+>>>>>>> 7961d6c2c2f8e2551eeff971619272f84bc666cf
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/assets-and-images/#resolution-aware
 

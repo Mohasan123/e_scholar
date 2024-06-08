@@ -1,4 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+<<<<<<< HEAD
 import 'package:e_scolar_app/models/student.dart';
 import 'package:e_scolar_app/models/userdata.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -6,26 +7,40 @@ import 'package:firebase_auth/firebase_auth.dart';
 import '../models/exam.dart';
 import '../models/module.dart';
 
+=======
+import 'package:e_scolar_app/models/userdata.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+
+>>>>>>> 7961d6c2c2f8e2551eeff971619272f84bc666cf
 class AuthMethods {
   final FirebaseAuth _auth = FirebaseAuth.instance;
   final FirebaseFirestore _fireStore = FirebaseFirestore.instance;
 
+<<<<<<< HEAD
   FirebaseFirestore get fireStore => _fireStore;
 
   //Add User ==> Student Or Professor
+=======
+>>>>>>> 7961d6c2c2f8e2551eeff971619272f84bc666cf
   Future<String> registerUser({
     required String email,
     required String name,
     required String password,
+<<<<<<< HEAD
     required String phone,
     required UserRole role,
     required List<String> modules,
   }) async {
     String result = "Some Error occurred";
+=======
+  }) async {
+    String rsp = "Some Error occurred";
+>>>>>>> 7961d6c2c2f8e2551eeff971619272f84bc666cf
     try {
       if (email.isNotEmpty || password.isNotEmpty || name.isNotEmpty) {
         UserCredential cred = await _auth.createUserWithEmailAndPassword(
             email: email, password: password);
+<<<<<<< HEAD
         if (cred.user != null) {
           String uid = cred.user!.uid;
           if (role == UserRole.student) {
@@ -109,11 +124,29 @@ class AuthMethods {
     }
   } // Verify SMS code
 
+=======
+        UserData userData =
+            UserData(email: email, name: name, uid: cred.user!.uid);
+
+        await _fireStore
+            .collection('users')
+            .doc(cred.user!.uid)
+            .set(userData.toJson());
+        rsp = "success";
+      }
+    } catch (err) {
+      rsp = err.toString();
+    }
+    return rsp;
+  } //Register user
+
+>>>>>>> 7961d6c2c2f8e2551eeff971619272f84bc666cf
   Future<String> loginUser({
     required String email,
     required String password,
   }) async {
     String res = "Some error occurred";
+<<<<<<< HEAD
 
     try {
       UserCredential authResult = await _auth.signInWithEmailAndPassword(
@@ -222,4 +255,19 @@ class AuthMethods {
         .get();
     return snapshot.docs.map((doc) => Exam.fromSnapshot(doc)).toList();
   }
+=======
+    try {
+      if (email.isNotEmpty || password.isNotEmpty) {
+        await _auth.signInWithEmailAndPassword(
+            email: email, password: password);
+        res = "success";
+      } else {
+        res = "Please Enter All the fields";
+      }
+    } catch (err) {
+      res = err.toString();
+    }
+    return res;
+  } //login User
+>>>>>>> 7961d6c2c2f8e2551eeff971619272f84bc666cf
 }

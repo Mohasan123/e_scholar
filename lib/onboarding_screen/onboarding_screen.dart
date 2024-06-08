@@ -10,6 +10,16 @@ class OnboardingScreen extends StatefulWidget {
 }
 
 class _OnboardingScreenState extends State<OnboardingScreen> {
+<<<<<<< HEAD
+=======
+  final int _currentIndex = 0;
+  final List<String> _onboardingTexts = [
+    "Welcome to Onboarding Page 1",
+    "This is Onboarding Page 2",
+    "Last Page of Onboarding",
+  ];
+
+>>>>>>> 7961d6c2c2f8e2551eeff971619272f84bc666cf
   @override
   Widget build(BuildContext context) {
     return Scaffold(

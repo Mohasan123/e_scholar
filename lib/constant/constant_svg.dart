@@ -7,6 +7,7 @@ class ConstSvg {
 class AssetOnboarding {
   static const onboardingImage = "assets/onboarding/image_unboarding.png";
 }
+<<<<<<< HEAD
 
 class IconAdmin {
   static const addStudent = "assets/icon_eschool/student.png";
@@ -18,3 +19,5 @@ class IconAdmin {
   static const addPlaner = "assets/icon_eschool/planner.png";
   static const addModule = "assets/icon_eschool/module.png";
 }
+=======
+>>>>>>> 7961d6c2c2f8e2551eeff971619272f84bc666cf

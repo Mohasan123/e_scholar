@@ -1,5 +1,10 @@
+<<<<<<< HEAD
 import 'package:dropdown_button2/dropdown_button2.dart';
 import 'package:e_scolar_app/models/userdata.dart';
+=======
+import 'package:e_scolar_app/auth/auth_methods.dart';
+import 'package:e_scolar_app/home_screen/home_screen.dart';
+>>>>>>> 7961d6c2c2f8e2551eeff971619272f84bc666cf
 import 'package:flutter/material.dart';
 import 'package:iconsax/iconsax.dart';
 
@@ -18,7 +23,10 @@ class _SignUpScreenState extends State<SignUpScreen> {
   TextEditingController emailController = TextEditingController();
   TextEditingController nameController = TextEditingController();
   TextEditingController passController = TextEditingController();
+<<<<<<< HEAD
   UserRole? dropdownValue = UserRole.student;
+=======
+>>>>>>> 7961d6c2c2f8e2551eeff971619272f84bc666cf
 
   @override
   void dispose() {
@@ -30,6 +38,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
 
   @override
   Widget build(BuildContext context) {
+<<<<<<< HEAD
     // Future<void> registerUser() async {
     //   if (dropdownValue == null) {
     //     ScaffoldMessenger.of(context).showSnackBar(
@@ -57,6 +66,19 @@ class _SignUpScreenState extends State<SignUpScreen> {
     //     );
     //   }
     // }
+=======
+    Future<void> registerUser() async {
+      String resp = await AuthMethods().registerUser(
+          email: emailController.text,
+          name: nameController.text,
+          password: passController.text);
+
+      if (resp == "success") {
+        Navigator.of(context)
+            .push(MaterialPageRoute(builder: (context) => HomeScreen()));
+      }
+    }
+>>>>>>> 7961d6c2c2f8e2551eeff971619272f84bc666cf
 
     return Scaffold(
       body: SafeArea(
@@ -133,6 +155,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                 ),
               ),
               const SizedBox(height: 15.0),
+<<<<<<< HEAD
               DropdownButtonHideUnderline(
                 child: DropdownButton2<UserRole>(
                   items: UserRole.values
@@ -149,6 +172,22 @@ class _SignUpScreenState extends State<SignUpScreen> {
                       dropdownValue = newValue;
                     });
                   },
+=======
+              Padding(
+                padding: const EdgeInsets.only(
+                    right: 20.0, left: 20.0, bottom: 10.0),
+                child: TextFormField(
+                  decoration: InputDecoration(
+                    labelText: "Confirm Password",
+                    hintText: "Re-enter your password",
+                    border: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(25.0),
+                    ),
+                    suffixIcon: const Icon(Iconsax.eye_slash),
+                    contentPadding:
+                        const EdgeInsets.symmetric(horizontal: 30.0),
+                  ),
+>>>>>>> 7961d6c2c2f8e2551eeff971619272f84bc666cf
                 ),
               ),
               const SizedBox(height: 15.0),
@@ -160,7 +199,11 @@ class _SignUpScreenState extends State<SignUpScreen> {
                       BoxDecoration(borderRadius: BorderRadius.circular(8.0)),
                   child: ElevatedButton(
                     onPressed: () {
+<<<<<<< HEAD
                       // registerUser();
+=======
+                      registerUser();
+>>>>>>> 7961d6c2c2f8e2551eeff971619272f84bc666cf
                     },
                     style: ElevatedButton.styleFrom(
                       backgroundColor: ColorPalette.primaryColor,
