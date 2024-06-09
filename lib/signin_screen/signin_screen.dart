@@ -1,5 +1,4 @@
 import 'package:e_scolar_app/auth/auth_methods.dart';
-import 'package:e_scolar_app/signin_screen/verify_sms_screen.dart';
 import 'package:e_scolar_app/signin_screen/widgets/circular_buttons.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
@@ -59,21 +58,7 @@ class _SignInScreenState extends State<SignInScreen> {
         final userData = await _authMethods.getUserData(email);
         print('Navigating based on role: ${userData.role}');
         if (userData.role == UserRole.student) {
-          if (userData.phone.isNotEmpty) {
-            await _authMethods.sendSMSCode(userData.phone);
-            Navigator.push(
-                context,
-                MaterialPageRoute(
-                    builder: (context) =>
-                        VerifySMSScreen(phoneNumber: userData.phone)));
-          } else {
-            // Handle case where the user does not have a phone number
-            ScaffoldMessenger.of(context).showSnackBar(
-              const SnackBar(
-                content: Text('Phone number is empty'),
-              ),
-            );
-          }
+          context.go('/');
         } else if (userData.role == UserRole.admin) {
           context.go('/home/admin');
         } else {
@@ -111,7 +96,7 @@ class _SignInScreenState extends State<SignInScreen> {
           ),
           child: Column(
             children: [
-              const SizedBox(height: 80.0),
+              const SizedBox(height: 120.0),
               const Text("Welcome Back",
                   style:
                       TextStyle(fontSize: 20.0, fontWeight: FontWeight.bold)),
@@ -123,7 +108,7 @@ class _SignInScreenState extends State<SignInScreen> {
                 "or continue with social media",
                 style: TextStyle(fontSize: 12.0),
               ),
-              const SizedBox(height: 8.0),
+              const SizedBox(height: 30.0),
               Padding(
                 padding: const EdgeInsets.only(
                     top: 10.0, right: 20.0, left: 20.0, bottom: 8.0),
@@ -159,7 +144,7 @@ class _SignInScreenState extends State<SignInScreen> {
                   ),
                 ),
               ),
-              const SizedBox(height: 20.0),
+              const SizedBox(height: 30.0),
               Padding(
                 padding: const EdgeInsets.only(left: 20.0, right: 20.0),
                 child: Row(
@@ -180,7 +165,7 @@ class _SignInScreenState extends State<SignInScreen> {
                       ),
                     ]),
               ),
-              const SizedBox(height: 15.0),
+              const SizedBox(height: 30.0),
               Padding(
                 padding: const EdgeInsets.only(left: 20.0, right: 20.0),
                 child: Container(
@@ -188,9 +173,25 @@ class _SignInScreenState extends State<SignInScreen> {
                   decoration:
                       BoxDecoration(borderRadius: BorderRadius.circular(8.0)),
                   child: ElevatedButton(
-                    onPressed: () {
+                    onPressed: () async {
                       if (_formKey.currentState!.validate()) {
-                        loginUser();
+                        if (await AuthMethods.canAuthenticate()) {
+                          bool authenticated = await AuthMethods.authenticate();
+                          if (authenticated) {
+                            await loginUser();
+                          } else {
+                            ScaffoldMessenger.of(context).showSnackBar(
+                              const SnackBar(
+                                  content: Text("Biometrics Auth Failed")),
+                            );
+                          }
+                        } else {
+                          ScaffoldMessenger.of(context).showSnackBar(
+                            const SnackBar(
+                                content: Text("Biometrics Auth not Available")),
+                          );
+                        }
+                        // loginUser();
                       }
                     },
                     style: ElevatedButton.styleFrom(
@@ -207,45 +208,7 @@ class _SignInScreenState extends State<SignInScreen> {
                   ),
                 ),
               ),
-              const Padding(
-                padding: EdgeInsets.only(left: 20.0, right: 20.0),
-                child: Center(
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      CircularButton(image: ConstSvg.googleSvg),
-                      SizedBox(width: 8.0),
-                      CircularButton(image: ConstSvg.twitterSvg),
-                      SizedBox(width: 8.0),
-                      CircularButton(image: ConstSvg.facebookSvg),
-                    ],
-                  ),
-                ),
-              ),
-              // Row(
-              //   mainAxisAlignment: MainAxisAlignment.center,
-              //   children: [
-              //     RichText(
-              //       text: TextSpan(
-              //         text: "Don't have an account?",
-              //         style: const TextStyle(
-              //             color: Colors.black, fontSize: 15, letterSpacing: 1),
-              //         children: <TextSpan>[
-              //           TextSpan(
-              //               text: " Sign Up",
-              //               style: const TextStyle(
-              //                   color: ColorPalette.primaryColor,
-              //                   fontSize: 16,
-              //                   fontWeight: FontWeight.bold),
-              //               recognizer: TapGestureRecognizer()
-              //                 ..onTap = () {
-              //                   context.go('/signUp');
-              //                 }),
-              //         ],
-              //       ),
-              //     ),
-              //   ],
-              // ),
+
             ],
           ),
         ),

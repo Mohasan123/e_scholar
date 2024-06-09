@@ -1,7 +1,6 @@
 import 'package:e_scolar_app/admin/home_admin/widgets/add_User.dart';
 import 'package:e_scolar_app/admin/home_screen_admin/home_admin.dart';
 import 'package:e_scolar_app/onboarding_screen/onboarding_screen.dart';
-import 'package:e_scolar_app/professor/home_screen_professor/home_Professor.dart';
 import 'package:e_scolar_app/signin_screen/signin_screen.dart';
 import 'package:e_scolar_app/signup_screen/signup_screen.dart';
 import 'package:e_scolar_app/splash_screen/splash_screen.dart';

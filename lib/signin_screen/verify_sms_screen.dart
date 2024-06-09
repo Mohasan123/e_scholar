@@ -1,9 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:e_scolar_app/auth/auth_methods.dart';
-import 'package:e_scolar_app/student/home_screen_student/home_student.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:go_router/go_router.dart';
 
 class VerifySMSScreen extends StatefulWidget {
   final String? phoneNumber;
@@ -37,25 +35,25 @@ class _VerifySMSScreenState extends State<VerifySMSScreen> {
 
     if (snapshot.exists) {
       final verificationId = snapshot.data()?['verificationId'];
-      if (verificationId != null) {
-        final isValid = await _auth.verifySMSCode(verificationId, code);
-        if (isValid) {
-          context.go('/');
-        } else {
-          ScaffoldMessenger.of(context).showSnackBar(
-            const SnackBar(
-              content: Text('Invalid code, please try again.'),
-            ),
-          );
-        }
-      }
+      // if (verificationId != null) {
+      //   final isValid = await _auth.verifySMSCode(verificationId, code);
+      //   if (isValid) {
+      //     context.go('/');
+      //   } else {
+      //     ScaffoldMessenger.of(context).showSnackBar(
+      //       const SnackBar(
+      //         content: Text('Invalid code, please try again.'),
+      //       ),
+      //     );
+      //   }
+      // }
     }
   }
 
   Future<void> sendCode() async {
     final phoneNumber = phoneController.text;
     if (phoneNumber.isNotEmpty) {
-      await _auth.sendSMSCode(phoneNumber);
+      // await _auth.sendSMSCode(phoneNumber);
     } else {
       ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(content: Text("Please enter a valid phone number")));
@@ -97,6 +95,13 @@ class _VerifySMSScreenState extends State<VerifySMSScreen> {
           ],
         ),
       ),
+    );
+  }
+
+  Widget authButton() {
+    return  ElevatedButton(
+      onPressed: verifyCode,
+      child: Text('Verify'),
     );
   }
 }

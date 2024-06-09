@@ -2,6 +2,8 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:e_scolar_app/models/student.dart';
 import 'package:e_scolar_app/models/userdata.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter/services.dart';
+import 'package:local_auth/local_auth.dart';
 
 import '../models/exam.dart';
 import '../models/module.dart';
@@ -9,8 +11,30 @@ import '../models/module.dart';
 class AuthMethods {
   final FirebaseAuth _auth = FirebaseAuth.instance;
   final FirebaseFirestore _fireStore = FirebaseFirestore.instance;
+  static final authBioMetrics = LocalAuthentication();
 
   FirebaseFirestore get fireStore => _fireStore;
+
+  //biometrics Auth permission
+  static Future<bool> canAuthenticate() async {
+    bool canAuthenticateWithBiometrics =
+        await authBioMetrics.canCheckBiometrics;
+    bool canAuthenticateWithPasscode = await authBioMetrics.isDeviceSupported();
+    return canAuthenticateWithBiometrics || canAuthenticateWithPasscode;
+  }
+
+  static Future<bool> authenticate() async {
+    try {
+      return await authBioMetrics.authenticate(
+        localizedReason: 'Please authenticate to show account',
+        options: const AuthenticationOptions(
+            useErrorDialogs: true, biometricOnly: false),
+      );
+    } on PlatformException catch (e) {
+      print('Error using biometrics: $e');
+      return false;
+    }
+  }
 
   //Add User ==> Student Or Professor
   Future<String> registerUser({
@@ -58,57 +82,58 @@ class AuthMethods {
     return result;
   } //Register user
 
-  Future<void> sendSMSCode(String phoneNumber) async {
-    if (phoneNumber.isEmpty) {
-      print("Error: Phone Number is Empty");
-      return;
-    }
-    try {
-      await _auth.verifyPhoneNumber(
-        phoneNumber: phoneNumber,
-        verificationCompleted: (PhoneAuthCredential credential) async {
-          await _auth.signInWithCredential(credential);
-          print(
-              'Phone number automatically verified and user signed in: $phoneNumber');
-        },
-        verificationFailed: (FirebaseAuthException e) {
-          print("Failed to verify phone number: ${e.message}");
-          if (e.code == 'invalid-phone-number') {
-            print('The provided phone number is not valid.');
-          } else {
-            print('Verification failed for some other reason: ${e.message}');
-          }
-        },
-        codeSent: (String verificationId, int? resendToken) async {
-          print('Code sent to $phoneNumber');
-          await _fireStore
-              .collection('users')
-              .doc(_auth.currentUser!.uid)
-              .update({'verificationId': verificationId});
-        },
-        codeAutoRetrievalTimeout: (String verificationId) {
-          print('Code auto-retrieval timeout for $phoneNumber');
-        },
-      );
-    } catch (e) {
-      print('Error sending SMS code: $e');
-    }
-  } // Send SMS code
+  // Future<void> sendSMSCode(String phoneNumber) async {
+  //   if (phoneNumber.isEmpty) {
+  //     print("Error: Phone Number is Empty");
+  //     return;
+  //   }
+  //   try {
+  //     await _auth.verifyPhoneNumber(
+  //       phoneNumber: phoneNumber,
+  //       verificationCompleted: (PhoneAuthCredential credential) async {
+  //         await _auth.signInWithCredential(credential);
+  //         print(
+  //             'Phone number automatically verified and user signed in: $phoneNumber');
+  //       },
+  //       verificationFailed: (FirebaseAuthException e) {
+  //         print("Failed to verify phone number: ${e.message}");
+  //         if (e.code == 'invalid-phone-number') {
+  //           print('The provided phone number is not valid.');
+  //         } else {
+  //           print('Verification failed for some other reason: ${e.message}');
+  //         }
+  //       },
+  //       codeSent: (String verificationId, int? resendToken) async {
+  //         print('Code sent to $phoneNumber');
+  //         await _fireStore
+  //             .collection('users')
+  //             .doc(_auth.currentUser!.uid)
+  //             .update({'verificationId': verificationId});
+  //       },
+  //       codeAutoRetrievalTimeout: (String verificationId) {
+  //         print('Code auto-retrieval timeout for $phoneNumber');
+  //       },
+  //     );
+  //   } catch (e) {
+  //     print('Error sending SMS code: $e');
+  //   }
+  // } // Send SMS code
 
-  Future<bool> verifySMSCode(String verificationId, String smsCode) async {
-    try {
-      PhoneAuthCredential credential = PhoneAuthProvider.credential(
-        verificationId: verificationId,
-        smsCode: smsCode,
-      );
-      await _auth.signInWithCredential(credential);
-      return true;
-    } catch (e) {
-      print("Failed to signin with SMS code: $e");
-      return false;
-    }
-  } // Verify SMS code
+  // Future<bool> verifySMSCode(String verificationId, String smsCode) async {
+  //   try {
+  //     PhoneAuthCredential credential = PhoneAuthProvider.credential(
+  //       verificationId: verificationId,
+  //       smsCode: smsCode,
+  //     );
+  //     await _auth.signInWithCredential(credential);
+  //     return true;
+  //   } catch (e) {
+  //     print("Failed to signin with SMS code: $e");
+  //     return false;
+  //   }
+  // } // Verify SMS code
 
+  //Login User
   Future<String> loginUser({
     required String email,
     required String password,
@@ -122,15 +147,30 @@ class AuthMethods {
         final userData = await getUserData(authResult.user!.email!);
         print('User role: ${userData.role}');
         if (userData.role == UserRole.student) {
-          if (userData.phone.isNotEmpty) {
-            await sendSMSCode(userData.phone);
-            res = 'success';
+          if (await canAuthenticate()) {
+            bool authenticated = await authenticate();
+            if (authenticated) {
+              res = 'success';
+            } else {
+              res = 'Biometric authentication failed';
+            }
           } else {
-            print('Error: Phone number is empty');
-            res = 'Phone number is empty';
+            res = 'success';
           }
-        } else {
+
+          //   if (userData.phone.isNotEmpty) {
+          //     // await sendSMSCode(userData.phone);
+          //     res = 'success';
+          //   } else {
+          //     print('Error: Phone number is empty');
+          //     res = 'Phone number is empty';
+          //   }
+          // } else {
+          //   res = 'success';
+        } else if (userData.role == UserRole.admin) {
           res = 'success';
+        } else {
+          res = 'error';
         }
       }
     } catch (e) {

@@ -53,6 +53,8 @@ dependencies:
   animated_snack_bar: ^0.4.0
   flutter_native_splash: ^2.4.0
   firebase_messaging: ^14.9.4
+  local_auth: ^2.2.0
+  flutter_screen_lock: ^9.0.4
 
 dev_dependencies:
   flutter_test:
