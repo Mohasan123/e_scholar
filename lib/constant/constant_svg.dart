@@ -17,4 +17,5 @@ class IconAdmin {
   static const addNote = "assets/icon_eschool/actualite.png";
   static const addPlaner = "assets/icon_eschool/planner.png";
   static const addModule = "assets/icon_eschool/module.png";
+  static const addClass = "assets/icon_eschool/classroom.png";
 }

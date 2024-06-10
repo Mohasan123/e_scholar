@@ -3,3 +3,5 @@ flutter_native_splash:
   color: "#50c2c9"
   android: true
   ios: true
+
+#  flutter pub run flutter_native_splash:create
