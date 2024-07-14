@@ -55,6 +55,14 @@ dependencies:
   firebase_messaging: ^14.9.4
   local_auth: ^2.2.0
   flutter_screen_lock: ^9.0.4
+  date_field: ^5.2.1
+  datetime_picker_formfield_new: ^2.1.0
+  table_calendar: ^3.1.2
+  pdf: ^3.11.0
+  path_provider: ^2.1.3
+  open_file: ^3.3.2
+  firebase_storage: ^11.7.7
+  http: ^1.2.1
 
 dev_dependencies:
   flutter_test:
@@ -94,6 +102,8 @@ flutter:
     - assets/animations/
     - assets/splash/
     - assets/icon_eschool/
+  #    - assets/fonts/Roboto-Bold.ttf
+  #    - assets/fonts/Roboto-Regular.ttf
 
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/assets-and-images/#resolution-aware

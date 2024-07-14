@@ -60,7 +60,7 @@ class _AddModalState extends State<AddModal> {
                 )),
           ),
           centerTitle: true,
-          title: const Text("Add Module",
+          title: const Text("Ajouter un Module",
               style: TextStyle(
                   fontSize: 20.0,
                   fontWeight: FontWeight.bold,
@@ -77,7 +77,7 @@ class _AddModalState extends State<AddModal> {
                 child: TextFormField(
                   controller: nameController,
                   decoration: InputDecoration(
-                    labelText: "Module Name",
+                    labelText: "Nom de Module",
                     hintText: "Enter Module Name",
                     border: OutlineInputBorder(
                       borderRadius: BorderRadius.circular(25.0),
@@ -94,7 +94,7 @@ class _AddModalState extends State<AddModal> {
                 child: TextFormField(
                   controller: moduleNumController,
                   decoration: InputDecoration(
-                    labelText: "Module Number",
+                    labelText: "Nombre de Module",
                     hintText: "Enter M2 or M12",
                     border: OutlineInputBorder(
                       borderRadius: BorderRadius.circular(25.0),
@@ -174,7 +174,7 @@ class _AddModalState extends State<AddModal> {
                       backgroundColor: ColorPalette.primaryColor,
                     ),
                     child: const Text(
-                      'Add',
+                      'Ajouter',
                       style: TextStyle(color: Colors.white, fontSize: 18.0),
                     ),
                   ),

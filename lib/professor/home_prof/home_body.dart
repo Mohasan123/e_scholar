@@ -1,6 +1,6 @@
 import 'package:e_scolar_app/admin/home_admin/widgets/container_icon.dart';
 import 'package:flutter/material.dart';
-import 'package:modular_ui/modular_ui.dart';
+import 'package:go_router/go_router.dart';
 
 import '../../constant/constant_svg.dart';
 import '../../constant/pallete_color.dart';
@@ -48,7 +48,7 @@ class _HomeBodyProfState extends State<HomeBodyProf> {
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
                                 Text(
-                                  "Admin: Ismail",
+                                  "Prof: Prof1",
                                   style: TextStyle(
                                     color: Colors.white,
                                     fontWeight: FontWeight.bold,
@@ -82,51 +82,22 @@ class _HomeBodyProfState extends State<HomeBodyProf> {
                 children: [
                   ContainerImage(
                     image: IconAdmin.addPlaner,
-                    text: 'See Planing',
+                    text: 'Voir le Planing',
                     onTap: () {},
                   ),
                   const SizedBox(height: 8.0),
                   ContainerImage(
                     image: IconAdmin.addDocument,
-                    text: 'Demand Document',
+                    text: 'Demander une Document',
                     onTap: () {},
                   ),
                   const SizedBox(height: 8.0),
                   ContainerImage(
                     image: IconAdmin.sentDiploma,
-                    text: 'Demand Diploma',
-                    onTap: () {},
-                  ),
-                  const SizedBox(height: 8.0),
-                  const Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Padding(
-                        padding: EdgeInsets.only(left: 24.0),
-                        child: Text(
-                          "Avis ",
-                          style: TextStyle(
-                              fontWeight: FontWeight.bold,
-                              fontSize: 20.0,
-                              color: Colors.black54),
-                        ),
-                      ),
-                      SizedBox(height: 5.0),
-                      MUICarousel(
-                        images: [
-                          "https://images.unsplash.com/photo-1682685797498-3bad2c6e161a?q=80&w=2070&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDF8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
-                          "https://images.unsplash.com/photo-1682685797498-3bad2c6e161a?q=80&w=2070&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDF8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
-                          "https://images.unsplash.com/photo-1682685797498-3bad2c6e161a?q=80&w=2070&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDF8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
-                          "https://images.unsplash.com/photo-1682685797498-3bad2c6e161a?q=80&w=2070&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDF8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
-                          "https://images.unsplash.com/photo-1682685797498-3bad2c6e161a?q=80&w=2070&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDF8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
-                          "https://images.unsplash.com/photo-1682685797498-3bad2c6e161a?q=80&w=2070&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDF8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
-                        ],
-                        showIndicator: false,
-                        duration: Duration(seconds: 10),
-                        indicatorType: CarouselIndicatorType.line,
-                        padding: EdgeInsets.only(right: 20.0, left: 20.0),
-                      ),
-                    ],
+                    text: 'Ajouter une Note',
+                    onTap: () {
+                      context.go('/addNote');
+                    },
                   ),
                   const SizedBox(height: 20.0),
                 ],

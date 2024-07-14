@@ -8,6 +8,12 @@
 		<string>E-Scholar</string>
 		<key>CFBundleExecutable</key>
 		<string>$(EXECUTABLE_NAME)</string>
+		<key>NSDocumentsFolderUsageDescription</key>
+        <string>Your description here</string>
+        <key>NSPhotoLibraryAddUsageDescription</key>
+        <string>Your description here</string>
+        <key>NSPhotoLibraryUsageDescription</key>
+        <string>Your description here</string>
 		<key>CFBundleIdentifier</key>
 		<string>$(PRODUCT_BUNDLE_IDENTIFIER)</string>
 		<key>CFBundleInfoDictionaryVersion</key>

@@ -1,5 +1,0 @@
-class Sector {
-  //filiere
-
-
-}

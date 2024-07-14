@@ -1,9 +1,8 @@
 import 'package:e_scolar_app/auth/auth_methods.dart';
-import 'package:e_scolar_app/signin_screen/widgets/circular_buttons.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 
-import '../constant/constant_svg.dart';
 import '../constant/pallete_color.dart';
 import '../models/userdata.dart';
 
@@ -27,63 +26,152 @@ class _SignInScreenState extends State<SignInScreen> {
     super.dispose();
   }
 
-  // Future<void> loginUser() async {
-  //   String res = await AuthMethods().loginUser(
-  //       email: emailController.text,
-  //       password: passController.text,
-  //       role: _selectedRole!);
-  //   if (res == "success") {
-  //     Navigator.push(
-  //         context,
-  //         MaterialPageRoute(
-  //             builder: (context) => HomeScreen(
-  //                   role: _selectedRole!,
-  //                 )));
-  //   } else {
-  //     ScaffoldMessenger.of(context).showSnackBar(
-  //       SnackBar(content: Text(res)),
-  //     );
-  //   }
-  // }
+  /*  ==== Biometrics & Email Verification  ===== */
   Future<void> loginUser() async {
     final email = emailController.text;
     final password = passController.text;
-    final result = await _authMethods.loginUser(
-      email: email,
-      password: password,
-    );
-    print('Login user result: $result');
-    if (result == 'success') {
-      try {
-        final userData = await _authMethods.getUserData(email);
-        print('Navigating based on role: ${userData.role}');
-        if (userData.role == UserRole.student) {
-          context.go('/');
-        } else if (userData.role == UserRole.admin) {
-          context.go('/home/admin');
-        } else {
+
+    try {
+      final result = await _authMethods.loginUser(
+        email: email,
+        password: password,
+      );
+      print('Login user result: $result');
+      if (result == 'verification_sent') {
+        showDialog(
+          context: context,
+          builder: (context) => AlertDialog(
+            title: const Text('Email Verification'),
+            content: const Text(
+                'A verification link has been sent to your email. Please verify and log in again.'),
+            actions: [
+              TextButton(
+                style: ButtonStyle(),
+                onPressed: () => Navigator.pop(context),
+                child: const Text('OK'),
+              ),
+            ],
+          ),
+        );
+      } else if (result == 'success') {
+        await completeLogin();
+      } else {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text(result),
+          ),
+        );
+      }
+    } catch (e) {
+      print("Error during login: $e");
+      if (e.toString().contains("too-many-requests")) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(
+            content: Text('Too many requests. Please try again later.'),
+          ),
+        );
+      } else {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text('Login error: $e'),
+          ),
+        );
+      }
+    }
+  }
+
+  Future<void> completeLogin() async {
+    User? user = FirebaseAuth.instance.currentUser;
+    if (user != null) {
+      final isVerified = await _authMethods.verifyEmail(user);
+      if (isVerified) {
+        try {
+          final userData = await _authMethods.getUserData(user.email!);
+          print('Navigating based on role: ${userData.role}');
+          if (userData.role == UserRole.student) {
+            context.go('/');
+          } else if (userData.role == UserRole.admin) {
+            context.go('/home/admin');
+          } else if (userData.role == UserRole.professor) {
+            context.go('/home/professor');
+          } else {
+            ScaffoldMessenger.of(context).showSnackBar(
+              const SnackBar(
+                content: Text('Role not found'),
+              ),
+            );
+          }
+        } catch (e) {
+          print('Error during user data fetching or navigation: $e');
           ScaffoldMessenger.of(context).showSnackBar(
-            const SnackBar(
-              content: Text('Role not found'),
+            SnackBar(
+              content: Text('Error fetching user data: $e'),
             ),
           );
         }
-      } catch (e) {
-        print('Error during user data fetching or navigation: $e');
+      } else {
         ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(
-            content: Text('Error fetching user data: $e'),
+          const SnackBar(
+            content: Text('Email not verified'),
           ),
         );
       }
     } else {
       ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(
-          content: Text(result),
+        const SnackBar(
+          content: Text('No user currently signed in'),
         ),
       );
     }
   }
+
+  /*  ==== ======= ===== */
+
+  /*  ==== Biometrics Verification ===== */
+
+  // Future<void> loginUser() async {
+  //   final email = emailController.text;
+  //   final password = passController.text;
+  //   final result = await _authMethods.loginUser(
+  //     email: email,
+  //     password: password,
+  //   );
+  //   print('Login user result: $result');
+  //   if (result == 'success') {
+  //     try {
+  //       final userData = await _authMethods.getUserData(email);
+  //       print('Navigating based on role: ${userData.role}');
+  //       if (userData.role == UserRole.student) {
+  //         context.go('/');
+  //       } else if (userData.role == UserRole.admin) {
+  //         context.go('/home/admin');
+  //       } else if (userData.role == UserRole.professor) {
+  //         context.go('/home/professor');
+  //       } else {
+  //         ScaffoldMessenger.of(context).showSnackBar(
+  //           const SnackBar(
+  //             content: Text('Role not found'),
+  //           ),
+  //         );
+  //       }
+  //     } catch (e) {
+  //       print('Error during user data fetching or navigation: $e');
+  //       ScaffoldMessenger.of(context).showSnackBar(
+  //         SnackBar(
+  //           content: Text('Error fetching user data: $e'),
+  //         ),
+  //       );
+  //     }
+  //   } else {
+  //     ScaffoldMessenger.of(context).showSnackBar(
+  //       SnackBar(
+  //         content: Text(result),
+  //       ),
+  //     );
+  //   }
+  // }
+
+  /*  ==== ======= ===== */
 
   @override
   Widget build(BuildContext context) {
@@ -132,6 +220,7 @@ class _SignInScreenState extends State<SignInScreen> {
                     right: 20.0, left: 20.0, bottom: 10.0),
                 child: TextFormField(
                   controller: passController,
+                  obscureText: true,
                   decoration: InputDecoration(
                     labelText: "Password",
                     hintText: "Enter your password",
@@ -175,23 +264,23 @@ class _SignInScreenState extends State<SignInScreen> {
                   child: ElevatedButton(
                     onPressed: () async {
                       if (_formKey.currentState!.validate()) {
-                        if (await AuthMethods.canAuthenticate()) {
-                          bool authenticated = await AuthMethods.authenticate();
-                          if (authenticated) {
-                            await loginUser();
-                          } else {
-                            ScaffoldMessenger.of(context).showSnackBar(
-                              const SnackBar(
-                                  content: Text("Biometrics Auth Failed")),
-                            );
-                          }
-                        } else {
-                          ScaffoldMessenger.of(context).showSnackBar(
-                            const SnackBar(
-                                content: Text("Biometrics Auth not Available")),
-                          );
-                        }
-                        // loginUser();
+                        // if (await AuthMethods.canAuthenticate()) {
+                        //   bool authenticated = await AuthMethods.authenticate();
+                        //   if (authenticated) {
+                        //     await loginUser();
+                        //   } else {
+                        //     ScaffoldMessenger.of(context).showSnackBar(
+                        //       const SnackBar(
+                        //           content: Text("Biometrics Auth Failed")),
+                        //     );
+                        //   }
+                        // } else {
+                        //   ScaffoldMessenger.of(context).showSnackBar(
+                        //     const SnackBar(
+                        //         content: Text("Biometrics Auth not Available")),
+                        //   );
+                        // }
+                        await loginUser();
                       }
                     },
                     style: ElevatedButton.styleFrom(
@@ -208,11 +297,100 @@ class _SignInScreenState extends State<SignInScreen> {
                   ),
                 ),
               ),
-
             ],
           ),
         ),
       ),
     );
   }
+
+/*  ==== Email Verification ===== */
+// Future<void> loginUser() async {
+//   final email = emailController.text;
+//   final password = passController.text;
+//   try {
+//     final result = await _authMethods.loginUser(
+//       email: email,
+//       password: password,
+//     );
+//     print('Login user result: $result');
+//     if (result == 'verification_sent') {
+//       showDialog(
+//         context: context,
+//         builder: (context) => AlertDialog(
+//           title: const Text('Email Verification'),
+//           content: const Text(
+//               'A verification link has been sent to your email. Please verify and log in again.'),
+//           actions: [
+//             TextButton(
+//               onPressed: () => Navigator.pop(context),
+//               child: const Text('OK'),
+//             ),
+//           ],
+//         ),
+//       );
+//     } else if (result == 'success') {
+//       await completeLogin();
+//     } else {
+//       ScaffoldMessenger.of(context).showSnackBar(
+//         SnackBar(
+//           content: Text(result),
+//         ),
+//       );
+//     }
+//   } catch (e) {
+//     print("Error during login: $e");
+//     if (e.toString().contains("too-many-requests")) {
+//       ScaffoldMessenger.of(context).showSnackBar(
+//         const SnackBar(
+//           content: Text('Too many requests. Please try again later.'),
+//         ),
+//       );
+//     } else {
+//       ScaffoldMessenger.of(context).showSnackBar(
+//         SnackBar(
+//           content: Text('Login error: $e'),
+//         ),
+//       );
+//     }
+//   }
+// }
+//
+// Future<void> completeLogin() async {
+//   final isVerified = await _authMethods.completeLogin();
+//   if (isVerified) {
+//     try {
+//       final userData = await _authMethods.getUserData(emailController.text);
+//       print('Navigating based on role: ${userData.role}');
+//       if (userData.role == UserRole.student) {
+//         context.go('/');
+//       } else if (userData.role == UserRole.admin) {
+//         context.go('/home/admin');
+//       } else if (userData.role == UserRole.professor) {
+//         context.go('/home/professor');
+//       } else {
+//         ScaffoldMessenger.of(context).showSnackBar(
+//           const SnackBar(
+//             content: Text('Role not found'),
+//           ),
+//         );
+//       }
+//     } catch (e) {
+//       print('Error during user data fetching or navigation: $e');
+//       ScaffoldMessenger.of(context).showSnackBar(
+//         SnackBar(
+//           content: Text('Error fetching user data: $e'),
+//         ),
+//       );
+//     }
+//   } else {
+//     ScaffoldMessenger.of(context).showSnackBar(
+//       const SnackBar(
+//         content: Text('Email not verified'),
+//       ),
+//     );
+//   }
+// }
+
+/*  ==== ======= ===== */
 }

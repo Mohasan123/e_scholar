@@ -7,23 +7,22 @@ class Professor {
   final String phone;
   final List<String> modules;
 
-  Professor({
-    required this.uid,
-    required this.name,
-    required this.email,
-    required this.phone,
-    required this.modules,
-  });
+  Professor(
+      {required this.uid,
+      required this.name,
+      required this.email,
+      required this.phone,
+      required this.modules});
 
   factory Professor.fromSnapshot(DocumentSnapshot snapshot) {
     var data = snapshot.data() as Map<String, dynamic>;
 
     return Professor(
-      uid: data['uid'],
+      uid: data['uid'] ?? '',
       name: data['name'],
       email: data['email'],
       phone: data['phone'],
-      modules: data['modules'],
+      modules: List<String>.from(data['modules'] ?? ''),
     );
   }
 

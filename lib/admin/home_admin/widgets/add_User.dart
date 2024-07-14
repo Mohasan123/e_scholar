@@ -1,9 +1,13 @@
+import 'dart:math';
+
 import 'package:animated_snack_bar/animated_snack_bar.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:datetime_picker_formfield_new/datetime_picker_formfield.dart';
 import 'package:e_scolar_app/auth/auth_methods.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import "package:iconsax/iconsax.dart";
+import 'package:intl/intl.dart';
 import 'package:multi_select_flutter/multi_select_flutter.dart';
 
 import '../../../constant/pallete_color.dart';
@@ -22,6 +26,13 @@ class _AddUserState extends State<AddUser> {
   TextEditingController passController = TextEditingController();
   TextEditingController nameController = TextEditingController();
   TextEditingController phoneController = TextEditingController();
+  TextEditingController codeApController = TextEditingController();
+  TextEditingController codeMsController = TextEditingController();
+  TextEditingController adresController = TextEditingController();
+  TextEditingController placeController = TextEditingController();
+  TextEditingController placeBirthController = TextEditingController();
+  DateTime? dateBirth;
+
   final _formKey = GlobalKey<FormState>();
   UserRole? dropdownValue = UserRole.student;
   final AuthMethods _authMethods = AuthMethods();
@@ -54,6 +65,7 @@ class _AddUserState extends State<AddUser> {
     phoneController.clear();
     passController.clear();
     nameController.clear();
+    codeApController.clear();
     _multiSelectKey.currentState?.reset();
     setState(() {
       _selectedModules = [];
@@ -106,16 +118,110 @@ class _AddUserState extends State<AddUser> {
                 const SizedBox(height: 20.0),
                 _buildTextField(emailController, "Email", Icons.email_outlined),
                 const SizedBox(height: 10.0),
-                _buildTextField(nameController, "Full Name", Iconsax.user),
+                _buildTextField(nameController, "Nom Complet", Iconsax.user),
                 const SizedBox(height: 10.0),
-                _buildTextField(phoneController, "Phone Number", Iconsax.call),
+                _buildTextField(codeMsController, "Code Massar", Icons.numbers),
                 const SizedBox(height: 10.0),
-                _buildTextField(passController, "Password", Icons.lock,
+                _buildTextField(placeController, "Lieu", Icons.place),
+                const SizedBox(height: 10.0),
+                _buildTextField(
+                    placeBirthController, "Lieu de Naissance", Icons.place),
+                const SizedBox(height: 10.0),
+                _buildTextField(adresController, "Adresse", Iconsax.user),
+                const SizedBox(height: 10.0),
+                Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 20.0),
+                  child: DateTimeField(
+                    onShowPicker: (context, currentValue) async {
+                      final date = await showDatePicker(
+                        context: context,
+                        firstDate: DateTime(1990),
+                        lastDate: DateTime(2100),
+                      );
+                      if (date != null) {
+                        final time = await showTimePicker(
+                          context: context,
+                          initialTime: TimeOfDay.fromDateTime(
+                              currentValue ?? DateTime.now()),
+                        );
+                        return DateTimeField.combine(date, time);
+                      } else {
+                        return currentValue;
+                      }
+                    },
+                    format: DateFormat("yyyy-MM-dd"),
+                    decoration: const InputDecoration(
+                      labelText: 'Date de Naissance',
+                      suffixIcon:
+                          Icon(Icons.calendar_today, color: Colors.black54),
+                    ),
+                    onChanged: (value) {
+                      dateBirth = value;
+                    },
+                  ),
+                ),
+                const SizedBox(height: 20.0),
+
+                _buildTextField(phoneController, "Tele", Iconsax.call),
+                const SizedBox(height: 10.0),
+                _buildTextField(passController, "Mot de passe", Icons.lock,
                     obscureText: true),
                 const SizedBox(height: 10.0),
                 _buildRoleDropdown(),
                 const SizedBox(height: 10.0),
-                _buildModuleMultiSelect(),
+                // if (dropdownValue == UserRole.student) ...[
+                // _buildTextField(
+                //     codeController, "Six-Digit Code", Iconsax.key),
+                Visibility(
+                  visible: dropdownValue == UserRole.student ||
+                      dropdownValue == UserRole.professor,
+                  child: Column(
+                    children: [
+                      if (dropdownValue == UserRole.student)
+                        Padding(
+                          padding: const EdgeInsets.symmetric(horizontal: 20.0),
+                          child: TextFormField(
+                            controller: codeApController,
+                            decoration: InputDecoration(
+                              labelText: 'Code Apogee',
+                              border: OutlineInputBorder(
+                                  borderRadius: BorderRadius.circular(25.0)),
+                              suffixIcon: const Icon(Iconsax.key),
+                              contentPadding:
+                                  const EdgeInsets.symmetric(horizontal: 30.0),
+                            ),
+                            validator: (value) {
+                              if (dropdownValue == UserRole.student &&
+                                  (value == null || value.isEmpty)) {
+                                return 'Generer';
+                              }
+                              return null;
+                            },
+                          ),
+                        ),
+                      if (dropdownValue == UserRole.student)
+                        ElevatedButton(
+                          style: ElevatedButton.styleFrom(
+                              backgroundColor: ColorPalette.primaryColor),
+                          onPressed: () {
+                            codeApController.text = generateSixDigitCode();
+                          },
+                          child: const Text(
+                            'Generer le Code',
+                            style: TextStyle(
+                                color: Colors.white,
+                                fontSize: 15.0,
+                                letterSpacing: 1),
+                          ),
+                        ),
+                      const SizedBox(height: 10.0),
+                      _buildModuleMultiSelect(),
+                    ],
+                  ),
+                ),
+                const SizedBox(height: 10.0),
+                // _buildModuleMultiSelect(),
+                // ],
                 const SizedBox(height: 15.0),
                 _buildSubmitButton(),
                 const SizedBox(height: 15.0),
@@ -136,7 +242,7 @@ class _AddUserState extends State<AddUser> {
         controller: controller,
         decoration: InputDecoration(
           labelText: label,
-          hintText: "Enter $label",
+          hintText: "Entrer $label",
           border: OutlineInputBorder(borderRadius: BorderRadius.circular(25.0)),
           suffixIcon: Icon(icon),
           contentPadding: const EdgeInsets.symmetric(horizontal: 30.0),
@@ -151,7 +257,7 @@ class _AddUserState extends State<AddUser> {
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
         const Text(
-          "Role of User :",
+          "Role de User :",
           style: TextStyle(
               color: Colors.black54,
               fontSize: 18.0,
@@ -171,7 +277,15 @@ class _AddUserState extends State<AddUser> {
             onChanged: (UserRole? newValue) {
               setState(() {
                 dropdownValue = newValue;
+                if (newValue == UserRole.student) {
+                  codeApController.text = generateSixDigitCode();
+                } else {
+                  codeApController.clear();
+                }
               });
+              // setState(() {
+              //   dropdownValue = newValue;
+              // });
             },
           ),
         ),
@@ -222,7 +336,7 @@ class _AddUserState extends State<AddUser> {
           style: ElevatedButton.styleFrom(
               backgroundColor: ColorPalette.primaryColor),
           child: const Text(
-            "Submit",
+            "Ajouter",
             style: TextStyle(
                 color: Colors.white, fontSize: 18.0, letterSpacing: 1),
           ),
@@ -250,6 +364,14 @@ class _AddUserState extends State<AddUser> {
         role: dropdownValue!,
         modules: moduleIds,
         phone: phoneController.text,
+        codeApogee:
+            dropdownValue == UserRole.student ? codeApController.text : null,
+        codeMassar:
+            dropdownValue == UserRole.student ? codeMsController.text : null,
+        adress: adresController.text,
+        place: placeController.text,
+        placeOfBirth: placeBirthController.text,
+        dateOfBirth: dateBirth!,
       );
 
       if (response == "success") {
@@ -267,5 +389,11 @@ class _AddUserState extends State<AddUser> {
         ).show(context);
       }
     }
+  }
+
+  String generateSixDigitCode() {
+    final random = Random();
+    final code = random.nextInt(900000) + 100000;
+    return code.toString();
   }
 }

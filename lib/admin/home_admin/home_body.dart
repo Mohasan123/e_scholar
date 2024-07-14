@@ -48,7 +48,7 @@ class _HomeBodyAdminState extends State<HomeBodyAdmin> {
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
                                 Text(
-                                  "Admin: Ismail",
+                                  "Admin: Admin1",
                                   style: TextStyle(
                                     color: Colors.white,
                                     fontWeight: FontWeight.bold,
@@ -82,7 +82,7 @@ class _HomeBodyAdminState extends State<HomeBodyAdmin> {
                 children: [
                   ContainerImage(
                     image: IconAdmin.addStudent,
-                    text: 'Add Student',
+                    text: 'Ajouter un Student',
                     onTap: () {
                       context.go('/addUser');
                     },
@@ -90,7 +90,7 @@ class _HomeBodyAdminState extends State<HomeBodyAdmin> {
                   const SizedBox(height: 8.0),
                   ContainerImage(
                     image: IconAdmin.addProf,
-                    text: 'Add Professor',
+                    text: 'Ajouter un Professor',
                     onTap: () {
                       context.go('/addUser');
                     },
@@ -98,13 +98,15 @@ class _HomeBodyAdminState extends State<HomeBodyAdmin> {
                   const SizedBox(height: 8.0),
                   ContainerImage(
                     image: IconAdmin.addPlaner,
-                    text: 'Add Planing',
-                    onTap: () {},
+                    text: 'Ajouter un Planing',
+                    onTap: () {
+                      context.go('/addPlaning');
+                    },
                   ),
                   const SizedBox(height: 8.0),
                   ContainerImage(
                     image: IconAdmin.addModule,
-                    text: 'Add Model',
+                    text: 'Ajouter un Module',
                     onTap: () {
                       context.go('/addModal');
                     },
@@ -112,27 +114,11 @@ class _HomeBodyAdminState extends State<HomeBodyAdmin> {
                   const SizedBox(height: 8.0),
                   ContainerImage(
                     image: IconAdmin.addClass,
-                    text: 'Add Class',
-                    onTap: () {},
+                    text: 'Ajouter un Classe',
+                    onTap: () {
+                      context.go('/addCourse');
+                    },
                   ),
-                  // const SizedBox(height: 8.0),
-                  // ContainerImage(
-                  //   image: IconAdmin.addAvis,
-                  //   text: 'Add Avis',
-                  //   onTap: () {},
-                  // ),
-                  // const SizedBox(height: 8.0),
-                  // ContainerImage(
-                  //   image: IconAdmin.addNote,
-                  //   text: 'Add Note',
-                  //   onTap: () {},
-                  // ),
-                  // const SizedBox(height: 8.0),
-                  // ContainerImage(
-                  //   image: IconAdmin.sentDiploma,
-                  //   text: 'Sent Diploma',
-                  //   onTap: () {},
-                  // ),
                   const SizedBox(height: 20.0),
                 ],
               ),

@@ -14,13 +14,13 @@ class Module {
   });
 
   factory Module.fromSnapshot(DocumentSnapshot snapshot) {
-    var data = snapshot.data() as Map<String, dynamic>;
+    var data = snapshot.data() as Map<String, dynamic>? ?? {};
 
     return Module(
-      id: data['id'] ?? '',
-      name: data['name'] ?? '',
-      moduleNum: data['moduleNum'] ?? '',
-      semester: data['semester'] ?? '',
+      id: data['id'],
+      name: data['name'],
+      moduleNum: data['moduleNum'],
+      semester: data['semester'],
     );
   }
 

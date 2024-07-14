@@ -38,6 +38,70 @@ class _HomeProfessorState extends State<HomeProfessor> {
     });
   }
 
+  void _showAlertDialog(BuildContext context) {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          backgroundColor: Colors.white,
+          shape: const RoundedRectangleBorder(
+            borderRadius: BorderRadius.all(
+              Radius.circular(8.0),
+            ),
+          ),
+          title: const Text(
+            'Sign Out',
+            style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20.0),
+          ),
+          content: const Text(
+            'Are you sure you want to sign out ?',
+            style: TextStyle(fontSize: 16.0),
+          ),
+          actions: <Widget>[
+            TextButton(
+              style: TextButton.styleFrom(
+                backgroundColor: ColorPalette.primaryColor,
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(12),
+                ),
+              ),
+              child: const Text(
+                'Annuler',
+                style: TextStyle(
+                    color: Colors.white,
+                    fontWeight: FontWeight.bold,
+                    fontSize: 16.0),
+              ),
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+            ),
+            TextButton(
+              style: TextButton.styleFrom(
+                backgroundColor: ColorPalette.primaryColor,
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(12),
+                ),
+              ),
+              child: const Text(
+                'Confirmer',
+                style: TextStyle(
+                    color: Colors.white,
+                    fontWeight: FontWeight.bold,
+                    fontSize: 16.0),
+              ),
+              onPressed: () {
+                // Handle the confirm action
+                FirebaseAuth.instance.signOut();
+                context.go('/signIn');
+              },
+            ),
+          ],
+        );
+      },
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -45,7 +109,7 @@ class _HomeProfessorState extends State<HomeProfessor> {
       appBar: AppBar(
         leading: IconButton(
           onPressed: () {
-            context.go('/signIn');
+            _showAlertDialog(context);
           },
           icon: const Icon(
             Iconsax.logout,

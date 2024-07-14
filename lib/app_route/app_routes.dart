@@ -1,13 +1,19 @@
 import 'package:e_scolar_app/admin/home_admin/widgets/add_User.dart';
+import 'package:e_scolar_app/admin/home_admin/widgets/add_class.dart';
+import 'package:e_scolar_app/admin/home_admin/widgets/add_planing.dart';
 import 'package:e_scolar_app/admin/home_screen_admin/home_admin.dart';
 import 'package:e_scolar_app/onboarding_screen/onboarding_screen.dart';
+import 'package:e_scolar_app/professor/home_prof/widgets/add_note.dart';
+import 'package:e_scolar_app/professor/home_screen_professor/home_Professor.dart';
 import 'package:e_scolar_app/signin_screen/signin_screen.dart';
 import 'package:e_scolar_app/signup_screen/signup_screen.dart';
 import 'package:e_scolar_app/splash_screen/splash_screen.dart';
 import 'package:e_scolar_app/student/home_screen_student/home_student.dart';
+import 'package:e_scolar_app/student/home_stud/widgets/request_document.dart';
 import 'package:go_router/go_router.dart';
 
 import '../admin/home_admin/widgets/AddModal.dart';
+import '../student/home_screen_student/noteUtils/student_note.dart';
 
 final GoRouter router = GoRouter(
   routes: <GoRoute>[
@@ -26,6 +32,11 @@ final GoRouter router = GoRouter(
       // const HomeScreen(role: UserRole.admin),
     ),
     GoRoute(
+      path: '/home/professor',
+      builder: (context, state) => const HomeProfessor(),
+      // const HomeScreen(role: UserRole.admin),
+    ),
+    GoRoute(
       path: '/signUp',
       builder: (context, state) => const SignUpScreen(),
     ),
@@ -35,10 +46,6 @@ final GoRouter router = GoRouter(
     ),
     GoRoute(
       path: '/onBoarding',
-      builder: (context, state) => const OnboardingScreen(),
-    ),
-    GoRoute(
-      path: '/Calendar',
       builder: (context, state) => const OnboardingScreen(),
     ),
     GoRoute(
@@ -52,6 +59,30 @@ final GoRouter router = GoRouter(
     GoRoute(
       path: '/addModal',
       builder: (context, state) => const AddModal(),
+    ),
+    GoRoute(
+      path: '/addCourse',
+      builder: (context, state) => const AddClass(),
+    ),
+    GoRoute(
+      path: '/addPlaning',
+      builder: (context, state) => const AddPlaning(),
+    ),
+    GoRoute(
+      path: '/addNote',
+      builder: (context, state) => const AddNote(),
+    ),
+    GoRoute(
+        path: '/studentNote/:studentId',
+        builder: (context, state) {
+          final studentId = state.pathParameters['studentId']!;
+          return StudentNoteScreen(
+            studentId: studentId,
+          );
+        }),
+    GoRoute(
+      path: '/requestDocument',
+      builder: (context, state) => const DocumentRequest(),
     ),
   ],
   initialLocation: '/signIn',
